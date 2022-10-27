@@ -197,7 +197,7 @@ function update_contact($account, $contact, $payload)
 function merge_contact($account, $contact, $payload)
 {
   global $etouch_url;
-  $url = "{$etouch_url}/api/v1/accounts/{$account}/contacts/{$contact}";
+  $url = "{$etouch_url}/api/v1/accounts/{$account}/actions/contact_merge";
   $payload->mergee_contact_id = $contact;
   $data = $payload;
 
