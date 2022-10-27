@@ -19,6 +19,7 @@ $data = json_decode($json);
 /** Declare variables */
 $message_type = $data->message_type; // message type
 $message = $data->content; // message content
+$message_event = $data->event; // message event
 
 $conversation = $data->conversation->id; // conversation id
 $status = $data->conversation->status; // conversation status
@@ -63,6 +64,9 @@ if ($message_type != "incoming") // Only incoming message can pass
   return;
 
 if ($status != "pending") // Only reply if status is pending
+  return;
+
+if ($message_event != "message_created") // Only reply if message_event is message_created
   return;
 
 $bot_response = send_to_bot($contact, $message); // Send message to Rasa and receive response(s) from it
