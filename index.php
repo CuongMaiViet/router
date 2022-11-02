@@ -17,6 +17,8 @@ error_log("request payload: #{$json}", 0);
 $data = json_decode($json);
 
 /** Declare variables */
+$additional_attributes = $data->additional_attributes; // additional attributes
+
 $message_type = $data->message_type; // message type
 $message = $data->content; // message content
 $message_event = $data->event; // message event
@@ -276,16 +278,21 @@ function split_str($str)
 
 function get_update_payload($bot_response)
 {
+  global $additional_attributes;
   $update_msg = explode("-", $bot_response);
   $update_content = explode(":", trim($update_msg[1]));
   $key = trim($update_content[0]);
   $value = trim($update_content[1]);
+  if ($key == "Company") {
+    $additional_attributes->company_name = $value;
+  }
   $o = (object) [
-    "Tên" => (object) ["name" => $value],
-    "SDT" => (object) ["phone_number" => $value],
+    "Username" => (object) ["name" => $value],
+    "Phone" => (object) ["phone_number" => $value],
     "Email" => (object) ["email" => $value],
     "Site" => (object) ["custom_attributes" => (object) ["website" => $value]],
-    "Giới tính" => (object) ["custom_attributes" => (object) ["gender" => ($value == "nam" ? 1 : 0)]]
+    "Gender" => (object) ["custom_attributes" => (object) ["gender" => ($value == "nam" ? 1 : 0)]],
+    "Company" => (object) ["additional_attributes" => $additional_attributes]
   ];
   return $o->$key;
 }
